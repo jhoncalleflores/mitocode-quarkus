@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mitocode.platform.domain.model.enums.ShipmentStatus;
-import org.mitocode.platform.domain.model.valueobjects.Item;
+import org.mitocode.platform.domain.model.valueobjects.Location;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,13 +17,12 @@ import static java.util.Objects.isNull;
 @NoArgsConstructor
 @Data
 @Builder
-public class Shipment {
+public class TrackingEvent {
     private UUID id;
     private String code;
-    private String customerId;
-    private ShipmentStatus currentStatus;
-    private Item item;
-    private DeliveryPerson assignedDeliveryPerson;
+    private ShipmentStatus status;
+    private Shipment associatedShipment;
+    private Location location;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
 
@@ -35,16 +34,6 @@ public class Shipment {
         if(isNull(code)){
             code = RandomStringUtils.randomAlphanumeric(12);
         }
-    }
-
-    public void updateStatus(ShipmentStatus newStatus) {
-        boolean isValidNextState = currentStatus.isValidNextState(newStatus.getState());
-        if (!isValidNextState) {
-            throw new IllegalStateException(
-                    "El status " + newStatus.getState() + " no esta disponible para el status " + currentStatus.getState()
-            );
-        }
-        currentStatus = newStatus;
     }
 
 }

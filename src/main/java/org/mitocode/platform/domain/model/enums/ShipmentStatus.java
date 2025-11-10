@@ -1,9 +1,12 @@
 package org.mitocode.platform.domain.model.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public enum ShipmentStatus {
@@ -20,6 +23,19 @@ public enum ShipmentStatus {
 
     public boolean isValidNextState(String nextState) {
         return nextStates.contains(nextState);
+    }
+
+    @JsonValue
+    public String getState() {
+        return state;
+    }
+
+    @JsonCreator
+    public static ShipmentStatus createFromState(String state) {
+        return Stream.of(ShipmentStatus.values())
+                .filter(shipmentStatus -> shipmentStatus.state.equals(state))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("El valor " + state + " no es un estado valido"));
     }
 
 }

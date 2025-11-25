@@ -1,7 +1,6 @@
 package org.mitocode.platform.interfaces.resources.response;
 
 import lombok.Builder;
-import org.mitocode.platform.domain.model.entities.DeliveryPerson;
 import org.mitocode.platform.domain.model.enums.ShipmentStatus;
 import org.mitocode.platform.domain.model.valueobjects.Item;
 
@@ -13,7 +12,7 @@ public record ShipmentResponse(
     String customerId,
     ShipmentStatus currentStatus,
     Item item,
-    DeliveryPerson assignedDeliveryPerson,
+    DeliveryPersonResponse assignedDeliveryPerson,
     LocalDateTime createdAt,
     LocalDateTime lastModifiedAt
 ) {

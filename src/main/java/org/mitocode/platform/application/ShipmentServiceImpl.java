@@ -7,8 +7,11 @@ import org.mitocode.platform.domain.model.entities.TrackingEvent;
 import org.mitocode.platform.domain.model.enums.ShipmentStatus;
 import org.mitocode.platform.domain.model.valueobjects.Location;
 import org.mitocode.platform.domain.services.ShipmentService;
+import org.mitocode.platform.infrastructure.exceptions.handlers.BusinessErrorType;
+import org.mitocode.platform.infrastructure.exceptions.handlers.BusinessException;
 import org.mitocode.platform.infrastructure.mappers.TrackingEventMapper;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +35,10 @@ public class ShipmentServiceImpl implements ShipmentService {
                 .filter(shipment -> shipment.getCode().equals(code))
                 .findFirst();
         if(existingShipment.isEmpty()) {
-            throw new IllegalArgumentException("No se encontro Shipment con code " + code);
+            throw new BusinessException(BusinessErrorType.VALIDATION_ERROR, "No se encontró Shipment con code " + code);
         }
+        existingShipment.get().updateStatus(newShipmentStatus);
+        existingShipment.get().setLastModifiedAt(LocalDateTime.now());
         TrackingEvent newTrackingEvent = TrackingEventMapper.createTrackingWithLocationAndShipment(
                 location, existingShipment.get()
         );
@@ -48,10 +53,11 @@ public class ShipmentServiceImpl implements ShipmentService {
                 .filter(shipment -> shipment.getCode().equals(existingShipmentCode))
                 .findFirst();
         if(existingShipment.isEmpty()) {
-            throw new IllegalArgumentException("No se encontro Shipment con code " + existingShipmentCode);
+            throw new BusinessException(BusinessErrorType.VALIDATION_ERROR, "No se encontró Shipment con code " + existingShipmentCode);
         }
         deliveryPerson.persist();
         existingShipment.get().setAssignedDeliveryPerson(deliveryPerson);
+        existingShipment.get().setLastModifiedAt(LocalDateTime.now());
         return existingShipment.get();
     }
 

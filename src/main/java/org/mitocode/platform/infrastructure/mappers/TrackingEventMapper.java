@@ -25,7 +25,7 @@ public final class TrackingEventMapper {
         return TrackingEventResponse.builder()
                 .code(trackingEvent.getCode())
                 .status(trackingEvent.getStatus())
-                .associatedShipment(trackingEvent.getAssociatedShipment())
+                .associatedShipment(ShipmentMapper.mapShipmentToShipmentResponse(trackingEvent.getAssociatedShipment()))
                 .createdAt(trackingEvent.getCreatedAt())
                 .location(trackingEvent.getLocation())
                 .lastModifiedAt(trackingEvent.getLastModifiedAt())

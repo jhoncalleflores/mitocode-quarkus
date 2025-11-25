@@ -27,7 +27,7 @@ public final class ShipmentMapper {
                 .customerId(shipment.getCustomerId())
                 .currentStatus(shipment.getCurrentStatus())
                 .item(shipment.getItem())
-                .assignedDeliveryPerson(shipment.getAssignedDeliveryPerson())
+                .assignedDeliveryPerson(DeliveryPersonMapper.mapDeliveryPersonToResponse(shipment.getAssignedDeliveryPerson()))
                 .createdAt(shipment.getCreatedAt())
                 .lastModifiedAt(shipment.getLastModifiedAt())
                 .build();
